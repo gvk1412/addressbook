@@ -14,7 +14,7 @@ Running the example from the command line
 ```
 $ mvn jetty:run
 ```
-# test commit
+# test commit..
 
 Open [http://localhost:8080/](http://localhost:8080/)
 
