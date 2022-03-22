@@ -1,5 +1,5 @@
 pipeline{
-    agent any
+    agent none
     tools{
         jdk 'myjava'
         maven 'mymaven'
@@ -10,7 +10,7 @@ pipeline{
     }
     stages{
         stage("COMPILE"){
-          
+            agent {label 'linux_slave'}
             steps{
                 script{
                     echo "Compiling the code"
@@ -19,7 +19,7 @@ pipeline{
             }
         }
         stage("UNITTEST"){
-           
+            agent any
             when{
                 expression{
                     params.executeTests == true
@@ -38,8 +38,12 @@ pipeline{
             }
         }
          stage("PACKAGE"){
-           
-           
+             agent {label 'linux_slave'}
+            when{
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps{
                 script{
                     echo "Packaging the code"
@@ -48,8 +52,12 @@ pipeline{
             }
         }
          stage("BUILD THE DOCKER IMAGE"){
-         
-            
+            agent any
+             when{
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps{
                 script{
                     echo "BUILDING THE DOCKER IMAGE"
@@ -63,8 +71,12 @@ pipeline{
         }
          }
         stage("DEPLOY"){
-            
-            
+            agent any
+             when{
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps{
                 script{
                     echo "Deploying the app"
